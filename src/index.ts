@@ -11,8 +11,10 @@ export class AsyncNodeStorage {
     try {
       const storedValue = this.localStorage.getItem(key)
       process.nextTick(() => cb(null, storedValue))
+      return Promise.resolve(storedValue)
     } catch (e) {
       cb(e)
+      return Promise.reject(e)
     }
   }
 
@@ -20,8 +22,10 @@ export class AsyncNodeStorage {
     try {
       this.localStorage.setItem(key, value)
       process.nextTick(() => cb(null))
+      return Promise.resolve()
     } catch (e) {
       cb(e)
+      return Promise.reject(e)
     }
   }
 
@@ -29,8 +33,10 @@ export class AsyncNodeStorage {
     try {
       this.localStorage.removeItem(key)
       process.nextTick(() => cb(null))
+      return Promise.resolve()
     } catch (e) {
       cb(e)
+      return Promise.reject(e)
     }
   }
 
@@ -41,8 +47,10 @@ export class AsyncNodeStorage {
         keys.push(this.localStorage.key(i))
       }
       process.nextTick(() => cb(null, keys))
+      return Promise.resolve(keys)
     } catch (e) {
       cb(e)
+      return Promise.reject(e)
     }
   }
 }
